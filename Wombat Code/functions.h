@@ -17,14 +17,14 @@ void End_Of_Code()
 }
 
 // Drive Distance in Meters
-void driveM(int distance, int speed)
+void driveM(float distance, int speed)
 {
     create3_drive_straight(distance, speed);
     End_Of_Code();
 }
 
 // Drive Distance in Feet
-void driveFT(int distance, int speed)
+void driveFT(float distance, int speed)
 {
     create3_drive_straight(distance * 0.333, speed);
     End_Of_Code();
@@ -44,5 +44,4 @@ void moveServo(int port, int position)
     set_servo_position(port, position);
 
     End_Of_Code();
-    disable_servos();
 }
