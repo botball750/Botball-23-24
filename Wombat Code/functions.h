@@ -1,47 +1,38 @@
-// Variables
-int Servo_Arm = 0;
-int Servo_Claw = 1;
-
-// Initialization
-void init()
+// Use Both Motors
+void mavs(int speed)
 {
-    create3_connect();
-    printf("Starting Create3 Code!\n");
+  mav(motor_one, speed);
+  mav(motor_two, speed);
 }
 
-// Perform at end of each function
-void End_Of_Code()
+// Drive using GMPC
+void drive(int distance, int speed)
 {
-    create3_wait();
-    printf("Process Executed Successfully.\n");
+  // Clear Motor Position Counter
+  cmpc(motor_one);
+  cmpc(motor_two);
+  
+  if (distance < 0)
+  {
+    while (gmpc(motor_one) || gmpc(motor_two) > distance)
+    {
+      mavs(-speed);
+    }
+  }
+  else
+  { 
+    while (gmpc(motor_one) || gmpc(motor_two) < distance)
+    {
+      mavs(speed);
+    }
+  }
+
+  mavs(speed);
 }
 
-// Drive Distance in Meters
-void driveM(float distance, int speed)
+void move_servo(int port, int position)
 {
-    create3_drive_straight(distance, speed);
-    End_Of_Code();
-}
+  enable_servos();
 
-// Drive Distance in Feet
-void driveFT(float distance, int speed)
-{
-    create3_drive_straight(distance * 0.333, speed);
-    End_Of_Code();
-}
-
-// Rotate Create3 in any degree
-void rotate(int rotation, int speed)
-{
-    create3_rotate_degrees(rotation, speed);
-    End_Of_Code();
-}
-
-// Move any servo in the arguemnts.
-void moveServo(int port, int position)
-{
-    enable_servos();
-    set_servo_position(port, position);
-
-    End_Of_Code();
+  set_servo_position(port, position);
 }
