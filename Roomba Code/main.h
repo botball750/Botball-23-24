@@ -1,7 +1,3 @@
-// Variables
-int Servo_Arm = 0;
-int Servo_Claw = 1;
-
 // Initialization
 void init()
 {
