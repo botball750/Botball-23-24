@@ -1,5 +1,10 @@
 #include <kipr/wombat.h>
 
+void ao();
+{
+    create_drive_direct(0, 0);
+}
+
 void servo(int port,int target_position, int pause_time)
 {
     enable_servos();
@@ -41,6 +46,7 @@ void turn(int tangle)
             create_drive_direct(-100, 100);
         }  
     }
+    ao();
 }
 
 void movegmpc(int GMPCNumber, int powerleft, int powerright)
