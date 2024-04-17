@@ -1,97 +1,30 @@
-// Import Libraries
-#include <stdio.h>
 #include <kipr/wombat.h>
-#include <mainFunctions.h>
+#include <functions.h>
 
 int main()
 {
-  // Reference Guide
-  /*
-    mavs(speed (percentage) - Utilize both motors
-    drive(distance (ticks) , speed (percentage) - Drive while using GMPC
+    //wait_for_light(1);
+    shut_down_in(115);
     
-    // SERVOS
-    armdown() (makes the arm go down)
-    armup() self explanitory 
+    create_connect();
+    enable_servos();
     
-    clawopen() self explanitory 
-    clawclose() self explanitory 
-  */
-    shut_down_in(119);
-    enable_servos(1, 3); // wake up servos
-
-    set_servo_position(1, 1990); // start the arm down
-    set_servo_position(3, 1700); //claw is open (1)
-    msleep(800);
-
-	// Drive to Cabinet
-    mavs(10000, 10000);
-    msleep(3000);
+    movegmpc(700,200, 200);
     ao();
     
-    motor(1, 25);
-    motor(3, -25);
-    msleep(1750);
+    turn(30); // Turn to align to two rocks
     
-    mavs(10000,10000);
-    msleep(2000);
-    ao(); // Stop Motor
+    sleep(1);
+    set_servo_position(2, 1300); // Push rocks together
+    sleep(1);
     
-    set_servo_position(3, 2047); //grab cabinet
-    msleep(1000);
+    movegmpc(200, 200, 200); // Move up a little to fully grab the two rocks
+    set_servo_position(2, 300); // Fully Close
     
-	mavs(-10000, -10000);
-    msleep(1000);
-    ao(); // Drive Back to release cabinet
+    movegmpc(700, 200, 200); // Go Towards 3rd rock
+    set_servo_position( 2, 1800); // Open Claw to get the third rock
     
-    set_servo_position(3, 60); // Open Claw
-    msleep(1000);
-   	
-    motor(1, -25); // Go For Rock One
-    motor(3, 25);
-    msleep(1750);
-    ao();
+    movegmpc(500, 200, 200); // Deliver Rocks
     
-    set_servo_position(1, 2047); // Go Down
-    mavs(10000, 10000);
-    msleep(850);
-    ao();
-    
-    msleep(1000); // Wait until stopped
-    set_servo_position(3, 1950); // Grab Rock One
-    
-    msleep(1000);
-    
-    // Deliver Rock
-    armup();
-    msleep(1000); // Delay 
-    
-    // 
-    motor(1, -25); // Go Around Orange
-    motor(3, 25);
-    msleep(1600);
-    ao();
-    
-    mavs(6000, 10000); // Drive to Rock Heap
-    msleep(4000);
-    ao();
-    
-    motor(1, 50); // Turn Towards Rock Heap
-    motor(3, -50);
-    msleep(1350);
-    ao();
-    
-    mavs(-10000,-10000);
-    msleep(500);
-    ao();
-    
-    armdown();
-    msleep(1000);
-    clawopen(); // Drop Off
-    
-    mavs(10000, 10000);
-    msleep(3000); // Drive Up
-    ao();
-    
-  return 0;
+    return 0;
 }
