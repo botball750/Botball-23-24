@@ -1,67 +1,70 @@
-// Use Both Motors
-const int motor_one = 0;
-const int motor_two = 3;
+#include <kipr/wombat.h>
 
-const int sensor_one = 0;
-const int sensor_two = 1;
-
-const int servo_one = 1;
-const int servo_two = 3;
-
-void mavs(int speed, int speed2)
+void servo(int port,int target_position, int pause_time)
 {
-  mav(motor_one, speed);
-  mav(motor_two, speed2);
-}
+    enable_servos();
 
-// Drive using GMPC
-void drive(int distance, int speed)
-{
-  // Clear Motor Position Counter
-  cmpc(motor_one);
-  cmpc(motor_two);
-  
-  if (distance < 0)
-  {
-    while (gmpc(motor_one) || gmpc(motor_two) > distance)
+    int current_position= get_servo_position(port);    
+
+    while(current_position != target_position)
     {
-      mavs(-speed, -speed);
+
+        if(current_position < target_position)
+        { current_position = current_position + 1;
+        }   
+        else
+        {  
+            current_position = current_position - 1;
+        }  
+        set_servo_position(port,current_position);
+        msleep(pause_time);  
     }
-  }
-  else
-  { 
-    while (gmpc(motor_one) || gmpc(motor_two) < distance)
+
+}                
+
+void turn(int tangle)
+{
+    set_create_total_angle(0);
+
+    if (tangle < 0) // Right
     {
-      mavs(speed, speed);
+        while(get_create_total_angle() > tangle)
+        {
+            create_drive_direct(100, -100);
+            printf("%d\n", get_create_total_angle());
+        }
     }
-  }
-
-  mavs(speed, speed);
+    else
+    {
+        while(get_create_total_angle() < tangle)
+        {
+            create_drive_direct(-100, 100);
+        }  
+    }
 }
 
-void move_servo(int port, int position)
+void movegmpc(int GMPCNumber, int powerleft, int powerright)
 {
-  enable_servos();
+    set_create_distance(0);
 
-  set_servo_position(port, position);
+    while (get_create_distance() < GMPCNumber) {
+        create_drive_direct(powerleft,powerright);
+    }
 }
 
-void armdown()
+void movebump()
 {
-    set_servo_position(1, 2047);
+    while(get_create_rbump() == 0 && get_create_lbump() == 0)
+    {
+        create_drive_direct(200,200);   
+    }
 }
 
-void armup()
+void sleep(float time)
 {
-    set_servo_position(1, 500);
+    msleep(time * 1000);   
 }
-
-void clawopen()
-{
-    set_servo_position(3, 300);
+    
+    return 0;
 }
-
-void clawclose()
-{
-    set_servo_position(3, 300);
-}
+          
