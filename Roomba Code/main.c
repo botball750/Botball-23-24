@@ -1,5 +1,5 @@
 #include <kipr/wombat.h>
-#include <functions.h>
+#include <main.h>
 
 int main()
 {
@@ -8,7 +8,6 @@ int main()
 
     create_connect();
     enable_servos();
-
 
     // Setup
     printf("hello world\n");
@@ -48,18 +47,44 @@ int main()
     movegmpc(150, 100, 100);
     set_servo_position(2, 1000);
     movegmpc(650, 200, 200); 
-    
+
     create_drive_direct(-100, -100);
     sleep(0.5);
     turn(10);
-    create_drive_direct(-200, -200);
+    
+    sleep(1);
+    
+    create_drive_direct(-200, -200); // Align Back Wall
+    sleep(3);
+
+    turn(15);
+    create_drive_direct(-200, -200); // Align Back Wall
+    set_servo_position(2, 1700);
     sleep(3);
     
-    turn(15);
-    create_drive_direct(-200, -200);
-    sleep(2.5);
+    movegmpc(600, 150, 150);
+    ao();
+
+    servo(1, 1960, 0.8);
+
+    sleep(1);
+    turn(30); // Face towards rock group one
+    sleep(1);
+    create_drive_direct(100, 100);
+    msleep(600);
+    ao();
+
+    servo(2, 330, 1);
+    sleep(1);
     
-    set_servo_position(2, 1700);
-    movegmpc(300, 150, 150);
+    create_drive_direct(-100, -100);
+    sleep(1.3);
+    
+    turn(-90);
+    
+    servo(1, 300, 1);
+    sleep(2);
+    servo(2, 1800, 0.6);
+
     return 0;
 }
