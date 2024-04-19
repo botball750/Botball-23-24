@@ -1,6 +1,6 @@
 #include <kipr/wombat.h>
 
-void ao();
+void ao()
 {
     create_drive_direct(0, 0);
 }
@@ -70,7 +70,3 @@ void sleep(float time)
 {
     msleep(time * 1000);   
 }
-    
-    return 0;
-}
-          
